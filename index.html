@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CamProbe Results</title>
+    <style>
+        :root {
+            --column-gap: 12px;
+            --sample-gap: 34px;
+            --prompt-gap: -10px;
+            --motion-font-size: 18px;
+            --motion-line-gap: 8px;
+            --hero-title-size: clamp(32px, 4.4vw, 52px);
+            --hero-authors-size: clamp(18px, 1.8vw, 22px);
+            --hero-button-gap: 40px;
+            --section-lead-size: clamp(17px, 1.6vw, 19px);
+            --section-title-size: 24px;
+            --section-subtitle-size: 19px;
+            --section-subtitle-indent: 0px;
+            --section-lead-bottom-gap: 54px;
+            --section-title-display-gap: 26px;
+            /* --hero-title-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); */
+            --hero-title-shadow: none;
+            --hero-text: #111111;
+            --hero-muted: #5b5b5b;
+            --hero-button-bg: #ececec;
+            --hero-button-border: #1a1a1a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 60vw;
+            max-width: 1400px;
+            min-width: 720px;
+            margin: auto;
+            padding: 24px 0 40px;
+        }
+
+        .section-title {
+            margin: 0 0 22px;
+            text-align: center;
+            font-size: var(--section-title-size);
+        }
+
+        .section-title-display {
+            font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .section-title-left {
+            text-align: left;
+            font-size: var(--section-subtitle-size);
+            padding-left: var(--section-subtitle-indent);
+        }
+
+        .section-title-spaced {
+            margin-bottom: var(--section-title-display-gap);
+        }
+
+        .page-header {
+            max-width: 920px;
+            margin: 0 auto 34px;
+            padding-top: 54px;
+            text-align: center;
+        }
+
+        .page-title {
+            max-width: none;
+            margin: 0 auto 26px;
+            color: var(--hero-text);
+            text-align: center;
+            font-size: var(--hero-title-size);
+            font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+            font-weight: 600;
+            line-height: 0.98;
+            letter-spacing: -0.025em;
+            text-shadow: var(--hero-title-shadow);
+        }
+
+        .page-authors {
+            margin: 0 0 14px;
+            text-align: center;
+            color: var(--hero-text);
+            font-size: var(--hero-authors-size);
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        .page-subtitle {
+            margin: 0;
+            text-align: center;
+            color: var(--hero-text);
+            font-size: clamp(16px, 1.35vw, 20px);
+            font-style: italic;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+        }
+
+        .page-placeholder,
+        .section-placeholder {
+            margin: 0 auto;
+            max-width: 760px;
+            text-align: center;
+            color: var(--hero-muted);
+            font-size: 17px;
+            line-height: 1.55;
+        }
+
+        .page-placeholder {
+            margin-bottom: 22px;
+        }
+
+        .section-placeholder {
+            margin-bottom: 18px;
+        }
+
+        .section-lead {
+            margin: 0 0 var(--section-lead-bottom-gap);
+            max-width: 900px;
+            color: var(--hero-text);
+            font-size: var(--section-lead-size);
+            font-weight: 400;
+            line-height: 1.35;
+            text-align: left;
+        }
+
+        .figure-stack {
+            width: min(100%, 800px);
+            margin: 0 auto 28px;
+        }
+
+        .hero-figure {
+            width: min(100%, 700px);
+            height: auto;
+            margin: 0 auto 0;
+            display: block;
+            border-radius: 14px;
+            background: #f4f4f4;
+            aspect-ratio: auto;
+            object-fit: contain;
+            box-shadow: none;
+        }
+
+        .hero-figure:last-child {
+            margin-bottom: 0;
+        }
+
+        .hero-figure.table-figure {
+            width: min(100%, 700px);
+        }
+
+        .page-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--hero-button-gap);
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .page-links-divider {
+            width: min(100%, 900px);
+            height: 1px;
+            margin: 34px auto 0;
+            background: #e9e2d7;
+        }
+
+        .page-link-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 96px;
+            padding: 7px 15px;
+            border: 1px solid var(--hero-button-border);
+            border-radius: 999px;
+            background: var(--hero-button-bg);
+            color: var(--hero-text);
+            text-decoration: none;
+            font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.07);
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .page-link-button:hover {
+            background: var(--hero-button-border);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.14);
+        }
+
+        .sample-block {
+            margin-bottom: var(--sample-gap);
+        }
+
+        .top-section {
+            margin-bottom: 54px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            margin-top: -5px;
+            gap: var(--column-gap);
+        }
+
+        .row.two-up {
+            justify-content: center;
+        }
+
+        .row.two-up .video-column {
+            flex: 0 1 calc((100% - var(--column-gap)) / 2);
+        }
+
+        .row.three-up .video-column {
+            flex: 0 1 calc((100% - (2 * var(--column-gap))) / 3);
+        }
+
+        .cap {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .cap_in {
+            flex: 1;
+            text-align: center;
+            font-weight: 400;
+        }
+
+        .cap_in.reference-label {
+            font-weight: 700;
+        }
+
+        .video-column {
+            flex: 1;
+        }
+
+        video,
+        img,
+        .motion-card {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 6px;
+        }
+
+        video {
+            aspect-ratio: 832 / 480;
+            object-fit: cover;
+            background: #000;
+            overflow: hidden;
+            clip-path: inset(0 round 6px);
+        }
+
+        img {
+            aspect-ratio: 832 / 480;
+            object-fit: cover;
+            background: #000;
+        }
+
+        .motion-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--motion-font-size);
+            font-weight: 600;
+            text-align: center;
+            padding: 0;
+            box-sizing: border-box;
+            background: transparent;
+            border: 0;
+            line-height: 1.35;
+        }
+
+        .block-set {
+            margin-top: var(--prompt-gap);
+            margin-bottom: 10px;
+        }
+
+        .prompt-text {
+            padding: 0 4px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .prompt-text.tight-leading {
+            line-height: 1.25;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                width: min(92vw, 900px);
+                min-width: 0;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                width: min(96vw, 560px);
+            }
+
+            .page-header {
+                padding-top: 34px;
+                margin-bottom: 40px;
+            }
+
+            .row,
+            .cap {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">Probing into Camera Control of Video Models</h1>
+        <p class="page-authors">Chen Hou, Christian Rupprecht</p>
+        <p class="page-subtitle">University of Oxford</p>
+        <div class="page-links">
+            <a class="page-link-button" href="#">Paper</a>
+            <a class="page-link-button" href="https://github.com/xrchitech/CamProbe" target="_blank" rel="noopener noreferrer">Code</a>
+        </div>
+        <div class="page-links-divider"></div>
+    </div>
+
+    <div class="sample-block top-section">
+        <p class="section-lead">We show that camera control in video generation need not be treated as an implicit learning problem. Instead, it is more naturally solved through a displacement-field guided generation. <br/>Using our method, we can control video camera motion without any finetuning.</p>
+        <h1 class="section-title section-title-display">Camera Control</h1>
+        <h1 class="section-title section-title-left">Multi-view Video Generation</h1>
+        <div class="row">
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/3d/3d-0.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/3d/3d-1.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/3d/3d-2.mp4" type="video/mp4"></video></div>
+        </div>
+        <div class="row">
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/3d/3d-3.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/3d/3d-4.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/3d/3d-5.mp4" type="video/mp4"></video></div>
+        </div>
+        <div class="block-set">
+            <p class="prompt-text">Our method can guide base models generate pseudo multi-view videos (results generated using Wan2.2-I2V-A14B).</p>
+        </div>
+    </div>
+
+    <div class="sample-block top-section">
+        <h1 class="section-title section-title-left">Basic and Complex Trajectories</h1>
+        <div class="cap">
+            <div class="cap_in">Tilt Up</div>
+            <div class="cap_in">Pan Right</div>
+            <div class="cap_in">Truck Left</div>
+        </div>
+        <div class="row">
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/basic/basic_tilt_up.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/basic/basic_pan_right.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/basic/basic_truck_left.mp4" type="video/mp4"></video></div>
+        </div>
+        <div class="cap">
+            <div class="cap_in">Zoom Out</div>
+            <div class="cap_in">Arc Left</div>
+            <div class="cap_in">Arc Right</div>
+        </div>
+        <div class="row">
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/basic/basic_zoom_out.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/basic/basic_arc_left.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/basic/basic_arc_right.mp4" type="video/mp4"></video></div>
+        </div>
+        <div class="row">
+            <div class="video-column"><img src="assets/complex/1.png" alt="Complex trajectory 1"></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/complex/complex-1-2.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/complex/complex-1-1.mp4" type="video/mp4"></video></div>
+        </div>
+        <div class="row">
+            <div class="video-column"><img src="assets/complex/2.png" alt="Complex trajectory 2"></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/complex/complex-2-2.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/complex/complex-2-1.mp4" type="video/mp4"></video></div>
+        </div>
+        <div class="row">
+            <div class="video-column"><img src="assets/complex/3.png" alt="Complex trajectory 3"></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/complex/complex-3-2.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/complex/complex-3-1.mp4" type="video/mp4"></video></div>
+        </div>
+        <div class="block-set">
+            <p class="prompt-text">Camera control results of our method, videos generated using Wan2.2-I2V-A14B.</p>
+        </div>
+    </div>
+
+    <div class="sample-block top-section">
+        <h1 class="section-title section-title-display section-title-spaced">Probing into Camera Control Capabilities</h1>
+        <p class="section-lead">As our method controls video camera motion without any finetuning, it can serve as a probe to study the camera control capabilities of video foundation models.<br/>Using this probe, we identify several similarities and differences across popular video base models. We further benchmark their multi-view generation capability for their potential use in 3D/4D tasks.</p>
+        <div class="figure-stack">
+            <img class="hero-figure" src="assets/dynamic_vs_quality.png" alt="Dynamic versus quality trade-off">
+            <img class="hero-figure table-figure" src="assets/table.png" alt="Table of probing results">
+        </div>
+        <h1 class="section-title section-title-left">Multi-view Probing Results</h1>
+
+        <div class="sample-block">
+            <div class="cap">
+                <div class="cap_in reference-label">Reference</div>
+                <div class="cap_in">HunyuanVideo-1.5-480P-I2V</div>
+                <div class="cap_in">Wan2.2-I2V-A14B</div>
+            </div>
+            <div class="row">
+                <div class="video-column"><img src="assets/multi-view/multi-view-1-reference.png" alt="Multi-view reference 1"></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-1-HunyuanVideo.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-1-WanI2V.mp4" type="video/mp4"></video></div>
+            </div>
+            <div class="cap">
+                <div class="cap_in">CogVideoX1.5-5B-I2V</div>
+                <div class="cap_in">LTX-2.3-22b-dev</div>
+                <div class="cap_in">Wan2.2-TI2V-5B</div>
+            </div>
+            <div class="row">
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-1-CogVideo.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-1-LTX.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-1-WanTI2V.mp4" type="video/mp4"></video></div>
+            </div>
+            <div class="block-set"><p class="prompt-text"><strong>Motion:</strong> Arc right.</p></div>
+        </div>
+
+        <div class="sample-block">
+            <div class="cap">
+                <div class="cap_in reference-label">Reference</div>
+                <div class="cap_in">HunyuanVideo-1.5-480P-I2V</div>
+                <div class="cap_in">Wan2.2-I2V-A14B</div>
+            </div>
+            <div class="row">
+                <div class="video-column"><img src="assets/multi-view/multi-view-2-reference.png" alt="Multi-view reference 2"></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-2-HunyuanVideo.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-2-WanI2V.mp4" type="video/mp4"></video></div>
+            </div>
+            <div class="cap">
+                <div class="cap_in">CogVideoX1.5-5B-I2V</div>
+                <div class="cap_in">LTX-2.3-22b-dev</div>
+                <div class="cap_in">Wan2.2-TI2V-5B</div>
+            </div>
+            <div class="row">
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-2-CogVideo.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-2-LTX.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-2-WanTI2V.mp4" type="video/mp4"></video></div>
+            </div>
+            <div class="block-set"><p class="prompt-text"><strong>Motion:</strong> Arc right.</p></div>
+        </div>
+
+        <div class="sample-block">
+            <div class="cap">
+                <div class="cap_in reference-label">Reference</div>
+                <div class="cap_in">HunyuanVideo-1.5-480P-I2V</div>
+                <div class="cap_in">Wan2.2-I2V-A14B</div>
+            </div>
+            <div class="row">
+                <div class="video-column"><img src="assets/multi-view/multi-view-4-reference.png" alt="Multi-view reference 4"></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-4-HunyuanVideo.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-4-WanI2V.mp4" type="video/mp4"></video></div>
+            </div>
+            <div class="cap">
+                <div class="cap_in">CogVideoX1.5-5B-I2V</div>
+                <div class="cap_in">LTX-2.3-22b-dev</div>
+                <div class="cap_in">Wan2.2-TI2V-5B</div>
+            </div>
+            <div class="row">
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-4-CogVideo.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-4-LTX.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/multi-view/multi-view-4-WanTI2V.mp4" type="video/mp4"></video></div>
+            </div>
+            <div class="block-set"><p class="prompt-text"><strong>Motion:</strong> Arc right.</p></div>
+        </div>
+    </div>
+
+    <div class="sample-block top-section">
+        <h1 class="section-title section-title-left">Motion Mode Shift</h1>
+
+        <div class="sample-block">
+            <div class="cap">
+                <div class="cap_in">LTX-2.3-22b-dev</div>
+                <div class="cap_in">HunyuanVideo-1.5-480P-I2V</div>
+                <div class="cap_in">Wan2.2-I2V-A14B</div>
+            </div>
+            <div class="cap">
+                <div class="cap_in"></div>
+                <div class="cap_in">Scale I</div>
+                <div class="cap_in"></div>
+            </div>
+            <div class="row">
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/mode-shift/scale-i-ltx.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/mode-shift/scale-i-hunyuanvideo.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/mode-shift/scale-i-wan-i2v.mp4" type="video/mp4"></video></div>
+            </div>
+
+            <div class="cap">
+                <div class="cap_in"></div>
+                <div class="cap_in">Scale II</div>
+                <div class="cap_in"></div>
+            </div>
+            <div class="row">
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/mode-shift/scale-ii-ltx.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/mode-shift/scale-ii-hunyuanvideo.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/mode-shift/scale-ii-wan-i2v.mp4" type="video/mp4"></video></div>
+            </div>
+
+            <div class="cap">
+                <div class="cap_in"></div>
+                <div class="cap_in">Scale III</div>
+                <div class="cap_in"></div>
+            </div>
+            <div class="row">
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/mode-shift/scale-iii-ltx.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/mode-shift/scale-iii-hunyuanvideo.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/mode-shift/scale-iii-wan-i2v.mp4" type="video/mp4"></video></div>
+            </div>
+
+            <div class="block-set"><p class="prompt-text tight-leading">As camera motion strength increases, HunyuanVideo-1.5 shifts from smooth motion to abrupt transitions,<br>while Wan2.2-I2V-A14B exhibits a later mode shift. LTX-2.3 shows little noticable camera motion.</p></div>
+        </div>
+    </div>
+
+    <div class="sample-block top-section">
+        <h1 class="section-title section-title-left">Failure Cases</h1>
+        <div class="row">
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/failure-case/wrong-dynamics.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/failure-case/mode-shift.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/failure-case/unrealistic-transition.mp4" type="video/mp4"></video></div>
+        </div>
+        <div class="row">
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/failure-case/content-change.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/failure-case/wrong-motion.mp4" type="video/mp4"></video></div>
+            <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/failure-case/dragging-effect.mp4" type="video/mp4"></video></div>
+        </div>
+        <div class="block-set"><p class="prompt-text tight-leading">From left to right:    wrong dynamics,   motion mode shift,   unrealistic transitions;<br>content change,   wrong motion,   dragging effect.</p></div>
+    </div>
+
+    <div class="sample-block top-section">
+        <h1 class="section-title section-title-display">Qualitative Comparison with Other Methods</h1>
+
+        <div class="sample-block">
+            <div class="cap">
+                <div class="cap_in reference-label">Reference</div>
+                <div class="cap_in">TrajectoryCrafter</div>
+                <div class="cap_in">ReCamMaster</div>
+            </div>
+            <div class="row">
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/ref/truck_right_ref.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/trajectorycrafter/truck_right_trajectorycrafter.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/recammaster/truck_right_recammaster.mp4" type="video/mp4"></video></div>
+            </div>
+            <div class="cap">
+                <div class="cap_in"></div>
+                <div class="cap_in">GEN3C</div>
+                <div class="cap_in">CamProbe</div>
+            </div>
+            <div class="row">
+                <div class="video-column"><div class="motion-card">Motion:<br>Truck Right</div></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/gen3c/truck_right_gen3c.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/camprobe/truck_right_camprobe.mp4" type="video/mp4"></video></div>
+            </div>
+            <div class="block-set"><p class="prompt-text"><strong>Prompt:</strong> A 3D model of a 1800s victorian house.</p></div>
+        </div>
+
+        <div class="sample-block">
+            <div class="cap">
+                <div class="cap_in reference-label">Reference</div>
+                <div class="cap_in">TrajectoryCrafter</div>
+                <div class="cap_in">ReCamMaster</div>
+            </div>
+            <div class="row">
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/ref/pedestal_down_ref.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/trajectorycrafter/pedestal_down_trajectorycrafter.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/recammaster/pedestal_down_recammaster.mp4" type="video/mp4"></video></div>
+            </div>
+            <div class="cap">
+                <div class="cap_in"></div>
+                <div class="cap_in">GEN3C</div>
+                <div class="cap_in">CamProbe</div>
+            </div>
+            <div class="row">
+                <div class="video-column"><div class="motion-card">Motion:<br>Pedestal Down</div></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/gen3c/pedestal_down_gen3c.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/camprobe/pedestal_down_camprobe.mp4" type="video/mp4"></video></div>
+            </div>
+            <div class="block-set"><p class="prompt-text"><strong>Prompt:</strong> An astronaut is riding a horse in the space in a photorealistic style.</p></div>
+        </div>
+
+        <div class="sample-block">
+            <div class="cap">
+                <div class="cap_in reference-label">Reference</div>
+                <div class="cap_in">TrajectoryCrafter</div>
+                <div class="cap_in">ReCamMaster</div>
+            </div>
+            <div class="row">
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/ref/zoom_in_ref.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/trajectorycrafter/zoom_in_trajectorycrafter.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/recammaster/zoom_in_recammaster.mp4" type="video/mp4"></video></div>
+            </div>
+            <div class="cap">
+                <div class="cap_in"></div>
+                <div class="cap_in">GEN3C</div>
+                <div class="cap_in">CamProbe</div>
+            </div>
+            <div class="row">
+                <div class="video-column"><div class="motion-card">Motion:<br>Zoom In</div></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/gen3c/zoom_in_gen3c.mp4" type="video/mp4"></video></div>
+                <div class="video-column"><video controls autoplay loop muted playsinline><source src="assets/comparison/camprobe/zoom_in_camprobe.mp4" type="video/mp4"></video></div>
+            </div>
+            <div class="block-set"><p class="prompt-text"><strong>Prompt:</strong> A panda playing on a swing set.</p></div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>
